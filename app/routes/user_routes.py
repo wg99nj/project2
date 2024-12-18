@@ -30,3 +30,4 @@ def upgrade_user(user_id):
     if not g.user:
         return jsonify({'error': 'Unauthorized'}), 401
     return upgrade_to_professional(user_id)
+
