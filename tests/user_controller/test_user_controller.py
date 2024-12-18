@@ -101,7 +101,8 @@ def test_get_user_profile(client, app):
     with app.app_context():
         user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
         user.save()
-        response = client.get(f'/api/users/{user.id}', headers={'Authorization': 'Bearer valid_token'})
+        user_id = user.id  # Ensure the user ID is retrieved after saving
+        response = client.get(f'/api/users/{user_id}', headers={'Authorization': 'Bearer valid_token'})
         assert response.status_code == 200
         data = json.loads(response.data)
         assert data['name'] == 'Test User'
@@ -112,7 +113,8 @@ def test_get_user_profile_invalid_token(client, app):
     with app.app_context():
         user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
         user.save()
-        response = client.get(f'/api/users/{user.id}', headers={'Authorization': 'Bearer invalid_token'})
+        user_id = user.id  # Ensure the user ID is retrieved after saving
+        response = client.get(f'/api/users/{user_id}', headers={'Authorization': 'Bearer invalid_token'})
         assert response.status_code == 401
         data = json.loads(response.data)
         assert 'error' in data
@@ -123,3 +125,4 @@ def test_get_user_profile_non_existent_user(client, app):
         assert response.status_code == 404
         data = json.loads(response.data)
         assert 'error' in data
+
