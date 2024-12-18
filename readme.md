@@ -1,143 +1,248 @@
+# Project Overview
 
+This project is a Flask-based web application with user management features, including profile updates and upgrading users to professional status. The application also includes an admin panel for managing users.
 
-# The User Management System Final Project: Your Epic Coding Adventure Awaits! 🎉✨🔥
+## Features
 
-## Introduction: Buckle Up for the Ride of a Lifetime 🚀🎬
+- User profile update
+- Upgrade user to professional status
+- Admin panel for managing users
+- Token-based authentication
+- User role management
 
-Welcome to the User Management System project! 🏫👨‍🏫⭐ This project is your gateway to coding glory, providing a bulletproof foundation for a user management system that will blow your mind! 🤯 You'll bridge the gap between the realms of seasoned software pros and aspiring student developers like yourselves. 
+## Setup
 
-### [Instructor Video - Project Overview and Tips](https://youtu.be/gairLNAp6mA) 🎥
+### Prerequisites
 
-- [Introduction to the system features and overview of the project - please read](system_documentation.md) 📚
-- [Project Setup Instructions](setup.md) ⚒️
-- [Features to Select From](features.md) 🛠️
-- [About the Project](about.md)🔥🌟
+- Python 3.10+
+- Flask
+- Flask-SQLAlchemy
+- pytest
 
-## Goals and Objectives: Unlock Your Coding Superpowers 🎯🏆🌟
+### Installation
 
-Get ready to ascend to new heights with this legendary project:
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/your-repo/project2.git
+    cd project2
+    ```
 
-1. **Practical Experience**: Dive headfirst into a real-world codebase, collaborate with your teammates, and contribute to an open-source project like a seasoned pro! 💻👩‍💻🔥
-2. **Quality Assurance**: Develop ninja-level skills in identifying and resolving bugs, ensuring your code quality and reliability are out of this world. 🐞🔍⚡
-3. **Test Coverage**: Write additional tests to cover edge cases, error scenarios, and important functionalities - leave no stone unturned and no bug left behind! ✅🧪🕵️‍♂️
-4. **Feature Implementation**: Implement a brand new, mind-blowing feature and make your epic mark on the project, following best practices for coding, testing, and documentation like a true artisan. ✨🚀🎆
-5. **Collaboration**: Foster teamwork and collaboration through code reviews, issue tracking, and adhering to contribution guidelines - teamwork makes the dream work, and together you'll conquer worlds! 🤝💪🌍
-6. **Industry Readiness**: Prepare for the software industry by working on a project that simulates real-world development scenarios - level up your skills to super hero status  and become an unstoppable coding force! 🔝🚀🏆⚡
+2. Create a virtual environment and activate it:
+    ```sh
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
 
-## Managing the Project Workload: Stay Focused, Stay Victorious ⏱️🧠⚡
+3. Install the dependencies:
+    ```sh
+    pip install -r requirements.txt
+    ```
 
-This project requires effective time management and a well-planned strategy, but fear not - you've got this! Follow these steps to ensure a successful (and sane!) project outcome:
+4. Set up the database:
+    ```sh
+    flask db upgrade
+    ```
 
-1. **Select a Feature**: [Choose a feature](features.md) from the provided list of additional improvements that sparks your interest and aligns with your goals like a laser beam. ✨⭐🎯 This is your chance to shine!
+5. Run the application:
+    ```sh
+    flask run
+    ```
 
-2. **Test Coverage Improvement**: Review the existing test suite and identify gaps in test coverage like a pro. Create 10 additional tests to cover edge cases, error scenarios, and important functionalities related to your chosen feature. Focus on areas such as user registration, login, authorization, and database interactions. Simulate the setup of the system as the admin user, then creating users, and updating user accounts - leave no stone unturned, no bug left behind! ✅🧪🔍🔬 Become the master of testing!
-
-3. **New Feature Implementation**: Implement your chosen feature, following the project's coding practices and architecture like a coding ninja. Write appropriate tests to ensure your new feature is functional and reliable like a rock. Document the new feature, including its usage, configuration, and any necessary migrations - future you will thank you profusely! 🚀✨📝👩‍💻⚡ Make your mark on this project!
-
-4. **Maintain a Working Main Branch**: Throughout the project, ensure you always have a working main branch deploying to Docker like a well-oiled machine. This will prevent any last-minute headaches and ensure a smooth submission process - no tears allowed, only triumphs! 😊🚢⚓ Stay focused, stay victorious!
-
-## Commands
-
-1. Start and build a multi-container application:
-
-```
-docker compose up --build
-```
-
-2. Goto http://localhost/docs to view openapi spec documentation
-
-Click "authorize" input username: `admin@example.com` password: `secret`
-
-3. Goto http://localhost:5050 to connect and manage the database.
-
-The following information must match the ones in the `docker-compose.yml` file.
-
-Login:
-
-- Email address / Username: `admin@example.com`
-- Password: `adminpassword`
-
-When add new server:
-
-- Host name/address: `postgres`
-- Port: `5432`
-- Maintenance database: `myappdb`
-- Username: `user`
-- Password: `password`
-
-## Optional Commands
-
-### Run `pytest` inside the containers:
-
-Run all tests:
+## Project Structure
 
 ```
-docker compose exec fastapi pytest
+project2/
+│
+├── app/
+│   ├── __init__.py
+│   ├── controllers/
+│   │   └── user_controller.py
+│   ├── models/
+│   │   ├── user.py
+│   │   └── notification.py
+│   ├── routes/
+│   │   └── user_routes.py
+│   ├── static/
+│   │   └── js/
+│   │       └── profile.js
+│   ├── templates/
+│   │   ├── profile.html
+│   │   └── admin.html
+│   └── routers/
+│       └── user_routes.py
+│
+├── tests/
+│   └── user_controller/
+│       └── test_user_controller.py
+│
+└── README.md
 ```
 
-Run a single test:
+## Routes
 
+### User Routes
+
+- `PUT /api/users/profile`: Update user profile fields.
+- `POST /api/users/<user_id>/upgrade`: Upgrade user to professional status.
+- `GET /api/users/<user_id>`: Get user details by ID.
+
+### Admin Routes
+
+- `GET /admin`: Admin panel for managing users.
+
+## Models
+
+### User Model
+
+```python
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    bio = db.Column(db.String(200))
+    location = db.Column(db.String(100))
+    professional_status = db.Column(db.Boolean, default=False)
+    token = db.Column(db.String(200), unique=True)
+    role = db.Column(db.String(50), default='user')
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'bio': self.bio,
+            'location': self.location,
+            'professional_status': self.professional_status
+        }
 ```
-docker compose exec fastapi pytest tests/test_services/test_user_service.py::test_list_users
+
+### Notification Model
+
+```python
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    message = db.Column(db.String(200))
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 ```
 
-### Creating database migration:
+## Tests
 
+### User Controller Tests
+
+Located in `tests/user_controller/test_user_controller.py`.
+
+- `test_update_user_profile`: Test updating user profile.
+- `test_update_user_profile_validation`: Test profile update validation.
+- `test_update_user_profile_missing_fields`: Test profile update with missing fields.
+- `test_update_user_profile_invalid_token`: Test profile update with invalid token.
+- `test_upgrade_user_to_professional`: Test upgrading user to professional status.
+- `test_upgrade_user_to_professional_invalid_token`: Test upgrading user with invalid token.
+- `test_upgrade_user_to_professional_non_admin`: Test upgrading user by non-admin.
+- `test_get_user_profile`: Test getting user profile.
+- `test_get_user_profile_invalid_token`: Test getting user profile with invalid token.
+- `test_get_user_profile_non_existent_user`: Test getting non-existent user profile.
+
+## Static Files
+
+### JavaScript
+
+Located in `app/static/js/profile.js`.
+
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (event) => {
+        const name = document.getElementById('name').value;
+        const bio = document.getElementById('bio').value;
+        const location = document.getElementById('location').value;
+
+        if (!name || !bio || !location) {
+            event.preventDefault();
+            alert('All fields are required.');
+        }
+    });
+});
 ```
-docker compose exec fastapi alembic revision --autogenerate -m 'added admin'
+
+## Templates
+
+### Profile Template
+
+Located in `app/templates/profile.html`.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ...existing code... -->
+</head>
+<body>
+    <!-- ...existing code... -->
+    <div class="profile">
+        <h1>Profile</h1>
+        <form action="/api/users/profile" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ user.name }}">
+            <label for="bio">Bio:</label>
+            <textarea id="bio" name="bio">{{ user.bio }}</textarea>
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" value="{{ user.location }}">
+            <button type="submit">Update Profile</button>
+        </form>
+        <p>Professional Status: {{ 'Yes' if user.professional_status else 'No' }}</p>
+    </div>
+    <!-- ...existing code... -->
+</body>
+</html>
 ```
 
+### Admin Template
 
-### Apply database migrations:
+Located in `app/templates/admin.html`.
 
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ...existing code... -->
+</head>
+<body>
+    <!-- ...existing code... -->
+    <div class="admin">
+        <h1>Admin Panel</h1>
+        <form action="/upgrade" method="GET">
+            <label for="search">Search Users:</label>
+            <input type="text" id="search" name="search">
+            <button type="submit">Search</button>
+        </form>
+        <div id="user-list">
+            {% for user in users %}
+                <div class="user">
+                    <p>{{ user.name }} ({{ user.email }})</p>
+                    <form action="/api/users/{{ user.id }}/upgrade" method="POST">
+                        <button type="submit">Upgrade to Professional</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- ...existing code... -->
+</body>
+</html>
 ```
-docker compose exec fastapi alembic upgrade head
-```
 
+## API Documentation
 
-## Submission and Grading: Your Chance to Shine 📝✏️📈
+The API documentation is available at `/docs` when the application is running.
 
-1. **Reflection Document**: Write a document file (`.md` file, at least 400 words) reflecting on your learnings throughout the course and your experience working on this epic project. Include **10 NEW tests, and 1 Feature** you'll be graded on. Make sure your project successfully deploys to DockerHub and include a link to your Docker repository in the document - let your work speak for itself! 📄🔗💥
+## License
 
-2. **Commit History**: Show off your consistent hard work through your commit history like a true coding warrior. **Projects with less than 10 commits will get an automatic 0 - ouch!** 😬⚠️ A significant part of your project's evaluation will be based on your use of issues, commits, and following a professional development process like a boss - prove your coding prowess! 💻🔄🔥
-
-3. **Deployability**: Broken projects that don't deploy to Dockerhub or pass all the automated tests on GitHub actions will face point deductions - nobody likes a buggy app! 🐞☠️ Show the world your flawless coding skills!
-
-### Grading Rubric: (100 Points)
-
-#### 1. Reflection Document (20 Points)
-
-- 10 Points: Quality and completeness of the reflection document, including insights into learnings, challenges faced, and how they were overcome. Must meet the minimum word count (400 words).
-- 10 Points: Clear and detailed description of the new feature implemented, including its purpose, usage, and configuration.
-
-#### 2. Commit History and Professional Development Process (20 Points)
-
-- 20 Points: Consistent commit history with meaningful commit messages. Projects with fewer than 10 commits receive 0 points in this category.
-
-
-#### 3. Test Coverage and Quality Assurance (30 Points)
-
-- 15 Points: Quality and thoroughness of 10 new test cases, covering edge cases, error scenarios, and critical functionalities.
-- 10 Points: New test cases must integrate well with the existing test suite and pass on GitHub Actions.
-- 5 Points: Tests demonstrate creativity and critical thinking, ensuring robust quality assurance for both existing and new features.
-
-#### 4. New Feature Implementation (30 Points)
-
-- 15 Points: Functionality and reliability of the new feature, including adherence to project coding standards and architecture.
-- 10 Points: Tests written for the new feature ensure it works as intended and handles edge cases.
-- 5 Points: Documentation of the new feature, including its purpose, configuration, and any necessary migrations.
-
-#### 5. Deployability (~~20 Points~~ Optional)
-
-- 10 bonus points: Working deployment to DockerHub, with no critical issues or broken functionalities. Add the DockerHub deployment link to the README or upload a screenshot of your project being pushed to DockerHub.
-- Maintains a clean and functional main branch throughout the project lifecycle.
-
-### Notes:
-
-This is our final assignment. You have two weeks to complete it, and late submissions will not be accepted.
-
-Remember, it's more important to make something work reliably and be reasonably complete than to implement an overly complex feature. Focus on creating a feature that you can build upon or demonstrate in an interview setting - show off your skills like a rockstar! 💪🚀🎓
-
-Don't forget to always have a working main branch deploying to Docker at all times. If you always have a working main branch, you will never be in jeopardy of receiving a very disappointing grade :-). Keep that main branch shining bright!
-
-Let's embark on this epic coding adventure together and conquer the world of software engineering! You've got this, coding rockstars! 🚀🌟✨
+This project is licensed under the MIT License.
