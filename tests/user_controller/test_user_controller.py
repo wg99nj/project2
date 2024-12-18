@@ -109,8 +109,7 @@ def test_get_user_profile_invalid_token(client):
         assert 'error' in data
 
 def test_get_user_profile_non_existent_user(client):
-    with client.application.app_context():
-        response = client.get('/api/users/999')
-        assert response.status_code == 404
-        data = json.loads(response.data)
-        assert 'error' in data
+    response = client.get('/api/users/999')
+    assert response.status_code == 404
+    data = json.loads(response.data)
+    assert 'error' in data
