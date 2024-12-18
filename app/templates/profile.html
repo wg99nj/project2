@@ -8,6 +8,7 @@
     <div class="profile">
         <h1>Profile</h1>
         <form action="/api/users/profile" method="POST">
+            <input type="hidden" name="_method" value="PUT">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" value="{{ user.name }}">
             <label for="bio">Bio:</label>
