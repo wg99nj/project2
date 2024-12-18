@@ -72,7 +72,7 @@ def test_update_user_profile_invalid_token(client, app):
 
 def test_upgrade_user_to_professional(client, app):
     with app.app_context():
-        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token", role="admin")
         user.save()
         response = client.post(f'/api/users/{user.id}/upgrade', headers={'Authorization': 'Bearer valid_token'})
         assert response.status_code == 200
@@ -81,7 +81,7 @@ def test_upgrade_user_to_professional(client, app):
 
 def test_upgrade_user_to_professional_invalid_token(client, app):
     with app.app_context():
-        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token", role="admin")
         user.save()
         response = client.post(f'/api/users/{user.id}/upgrade', headers={'Authorization': 'Bearer invalid_token'})
         assert response.status_code == 401
@@ -90,9 +90,9 @@ def test_upgrade_user_to_professional_invalid_token(client, app):
 
 def test_upgrade_user_to_professional_non_admin(client, app):
     with app.app_context():
-        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token", role="user")
         user.save()
-        response = client.post(f'/api/users/{user.id}/upgrade', headers={'Authorization': 'Bearer non_admin_token'})
+        response = client.post(f'/api/users/{user.id}/upgrade', headers={'Authorization': 'Bearer valid_token'})
         assert response.status_code == 403
         data = json.loads(response.data)
         assert 'error' in data
