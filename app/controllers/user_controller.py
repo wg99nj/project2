@@ -40,3 +40,4 @@ def upgrade_to_professional(user_id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
 
+
