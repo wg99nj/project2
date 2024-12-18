@@ -243,3 +243,9 @@ Located in `app/templates/admin.html`.
 
 The API documentation is available at `/docs` when the application is running.
 
+## Docker Image
+
+![image](https://github.com/user-attachments/assets/8a102c47-4bd1-4f26-9283-da7eda1ebfec)
+
+
+
