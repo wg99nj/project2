@@ -25,7 +25,7 @@ def update_user_profile():
     return update_profile(request)
 
 # Route for managers and admins to upgrade user to professional status
-@user_routes.route('/api/users/<user_id>/upgrade', methods['POST'])
+@user_routes.route('/api/users/<user_id>/upgrade', methods=['POST'])
 def upgrade_user(user_id):
     if not g.user:
         return jsonify({'error': 'Unauthorized'}), 401
