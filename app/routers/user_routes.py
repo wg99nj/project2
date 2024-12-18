@@ -1,22 +1,3 @@
-"""
-This Python file is part of a FastAPI application, demonstrating user management functionalities including creating, reading,
-updating, and deleting (CRUD) user information. It uses OAuth2 with Password Flow for security, ensuring that only authenticated
-users can perform certain operations. Additionally, the file showcases the integration of FastAPI with SQLAlchemy for asynchronous
-database operations, enhancing performance by non-blocking database calls.
-
-The implementation emphasizes RESTful API principles, with endpoints for each CRUD operation and the use of HTTP status codes
-and exceptions to communicate the outcome of operations. It introduces the concept of HATEOAS (Hypermedia as the Engine of
-Application State) by including navigational links in API responses, allowing clients to discover other related operations dynamically.
-
-OAuth2PasswordBearer is employed to extract the token from the Authorization header and verify the user's identity, providing a layer
-of security to the operations that manipulate user data.
-
-Key Highlights:
-- Use of FastAPI's Dependency Injection system to manage database sessions and user authentication.
-- Demonstrates how to perform CRUD operations in an asynchronous manner using SQLAlchemy with FastAPI.
-- Implements HATEOAS by generating dynamic links for user-related actions, enhancing API discoverability.
-- Utilizes OAuth2PasswordBearer for securing API endpoints, requiring valid access tokens for operations.
-"""
 
 from builtins import dict, int, len, str
 from datetime import timedelta
@@ -125,21 +106,7 @@ async def delete_user(user_id: UUID, db: AsyncSession = Depends(get_db), token: 
 
 @router.post("/users/", response_model=UserResponse, status_code=status.HTTP_201_CREATED, tags=["User Management Requires (Admin or Manager Roles)"], name="create_user")
 async def create_user(user: UserCreate, request: Request, db: AsyncSession = Depends(get_db), email_service: EmailService = Depends(get_email_service), token: str = Depends(oauth2_scheme), current_user: dict = Depends(require_role(["ADMIN", "MANAGER"]))):
-    """
-    Create a new user.
 
-    This endpoint creates a new user with the provided information. If the email
-    already exists, it returns a 400 error. On successful creation, it returns the
-    newly created user's information along with links to related actions.
-
-    Parameters:
-    - user (UserCreate): The user information to create.
-    - request (Request): The request object.
-    - db (AsyncSession): The database session.
-
-    Returns:
-    - UserResponse: The newly created user's information along with navigation links.
-    """
     existing_user = await UserService.get_by_email(db, user.email)
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already exists")
