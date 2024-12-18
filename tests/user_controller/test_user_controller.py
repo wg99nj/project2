@@ -5,7 +5,7 @@ from flask import json
 
 @pytest.fixture
 def client():
-    app = create_app()
+    app = create_app('testing')
     app.config['TESTING'] = True
     with app.test_client() as client:
         with app.app_context():
@@ -104,3 +104,4 @@ def test_get_user_profile_non_existent_user(client):
     assert response.status_code == 404
     data = json.loads(response.data)
     assert 'error' in data
+
