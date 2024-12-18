@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ...existing code... -->
+</head>
+<body>
+    <!-- ...existing code... -->
+    <div class="admin">
+        <h1>Admin Panel</h1>
+        <form action="/upgrade" method="GET">
+            <label for="search">Search Users:</label>
+            <input type="text" id="search" name="search">
+            <button type="submit">Search</button>
+        </form>
+        <div id="user-list">
+            {% for user in users %}
+                <div class="user">
+                    <p>{{ user.name }} ({{ user.email }})</p>
+                    <form action="/api/users/{{ user.id }}/upgrade" method="POST">
+                        <button type="submit">Upgrade to Professional</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- ...existing code... -->
+</body>
+</html>

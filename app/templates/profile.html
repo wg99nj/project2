@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ...existing code... -->
+</head>
+<body>
+    <!-- ...existing code... -->
+    <div class="profile">
+        <h1>Profile</h1>
+        <form action="/api/users/profile" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ user.name }}">
+            <label for="bio">Bio:</label>
+            <textarea id="bio" name="bio">{{ user.bio }}</textarea>
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" value="{{ user.location }}">
+            <button type="submit">Update Profile</button>
+        </form>
+        <p>Professional Status: {{ 'Yes' if user.professional_status else 'No' }}</p>
+    </div>
+    <!-- ...existing code... -->
+</body>
+</html>
