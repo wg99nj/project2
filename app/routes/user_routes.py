@@ -31,3 +31,13 @@ def upgrade_user(user_id):
         return jsonify({'error': 'Unauthorized'}), 401
     return upgrade_to_professional(user_id)
 
+# Route to get user details by ID
+@user_routes.route('/api/users/<user_id>', methods=['GET'])
+def get_user(user_id):
+    if not g.user:
+        return jsonify({'error': 'Unauthorized'}), 401
+    user = User.query.filter_by(id=user_id).first()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    return jsonify(user.serialize()), 200
+
