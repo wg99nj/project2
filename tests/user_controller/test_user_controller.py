@@ -121,6 +121,9 @@ def test_get_user_profile_invalid_token(client, app):
 
 def test_get_user_profile_non_existent_user(client, app):
     with app.app_context():
+        # Ensure a valid token is used for authorization
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
+        user.save()
         response = client.get('/api/users/999', headers={'Authorization': 'Bearer valid_token'})
         assert response.status_code == 404
         data = json.loads(response.data)
