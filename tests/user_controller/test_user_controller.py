@@ -1,3 +1,4 @@
+
 import pytest
 from app import create_app, db
 from app.models.user import User
@@ -15,9 +16,9 @@ def client():
 
 def test_update_user_profile(client):
     with client.application.app_context():
-        user = User(name="Test User", bio="Test Bio", location="Test Location")
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
         user.save()
-        response = client.put('/api/users/profile', json={
+        response = client.put('/api/users/profile', headers={'Authorization': 'Bearer valid_token'}, json={
             'name': 'Updated Name',
             'bio': 'Updated Bio',
             'location': 'Updated Location'
@@ -30,7 +31,9 @@ def test_update_user_profile(client):
 
 def test_update_user_profile_validation(client):
     with client.application.app_context():
-        response = client.put('/api/users/profile', json={
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
+        user.save()
+        response = client.put('/api/users/profile', headers={'Authorization': 'Bearer valid_token'}, json={
             'name': '',
             'bio': 'Updated Bio',
             'location': 'Updated Location'
@@ -41,7 +44,9 @@ def test_update_user_profile_validation(client):
 
 def test_update_user_profile_missing_fields(client):
     with client.application.app_context():
-        response = client.put('/api/users/profile', json={
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
+        user.save()
+        response = client.put('/api/users/profile', headers={'Authorization': 'Bearer valid_token'}, json={
             'name': 'Updated Name',
             'bio': '',
             'location': 'Updated Location'
@@ -52,6 +57,8 @@ def test_update_user_profile_missing_fields(client):
 
 def test_update_user_profile_invalid_token(client):
     with client.application.app_context():
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
+        user.save()
         response = client.put('/api/users/profile', headers={'Authorization': 'Bearer invalid_token'}, json={
             'name': 'Updated Name',
             'bio': 'Updated Bio',
@@ -63,16 +70,16 @@ def test_update_user_profile_invalid_token(client):
 
 def test_upgrade_user_to_professional(client):
     with client.application.app_context():
-        user = User(name="Test User", bio="Test Bio", location="Test Location")
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
         user.save()
-        response = client.post(f'/api/users/{user.id}/upgrade')
+        response = client.post(f'/api/users/{user.id}/upgrade', headers={'Authorization': 'Bearer valid_token'})
         assert response.status_code == 200
         data = json.loads(response.data)
         assert data['professional_status'] == True
 
 def test_upgrade_user_to_professional_invalid_token(client):
     with client.application.app_context():
-        user = User(name="Test User", bio="Test Bio", location="Test Location")
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
         user.save()
         response = client.post(f'/api/users/{user.id}/upgrade', headers={'Authorization': 'Bearer invalid_token'})
         assert response.status_code == 401
@@ -81,7 +88,7 @@ def test_upgrade_user_to_professional_invalid_token(client):
 
 def test_upgrade_user_to_professional_non_admin(client):
     with client.application.app_context():
-        user = User(name="Test User", bio="Test Bio", location="Test Location")
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
         user.save()
         response = client.post(f'/api/users/{user.id}/upgrade', headers={'Authorization': 'Bearer non_admin_token'})
         assert response.status_code == 403
@@ -90,9 +97,9 @@ def test_upgrade_user_to_professional_non_admin(client):
 
 def test_get_user_profile(client):
     with client.application.app_context():
-        user = User(name="Test User", bio="Test Bio", location="Test Location")
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
         user.save()
-        response = client.get(f'/api/users/{user.id}')
+        response = client.get(f'/api/users/{user.id}', headers={'Authorization': 'Bearer valid_token'})
         assert response.status_code == 200
         data = json.loads(response.data)
         assert data['name'] == 'Test User'
@@ -101,7 +108,7 @@ def test_get_user_profile(client):
 
 def test_get_user_profile_invalid_token(client):
     with client.application.app_context():
-        user = User(name="Test User", bio="Test Bio", location="Test Location")
+        user = User(name="Test User", bio="Test Bio", location="Test Location", token="valid_token")
         user.save()
         response = client.get(f'/api/users/{user.id}', headers={'Authorization': 'Bearer invalid_token'})
         assert response.status_code == 401
@@ -109,7 +116,8 @@ def test_get_user_profile_invalid_token(client):
         assert 'error' in data
 
 def test_get_user_profile_non_existent_user(client):
-    response = client.get('/api/users/999')
-    assert response.status_code == 404
-    data = json.loads(response.data)
-    assert 'error' in data
+    with client.application.app_context():
+        response = client.get('/api/users/999', headers={'Authorization': 'Bearer valid_token'})
+        assert response.status_code == 404
+        data = json.loads(response.data)
+        assert 'error' in data
