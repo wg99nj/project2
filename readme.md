@@ -243,6 +243,3 @@ Located in `app/templates/admin.html`.
 
 The API documentation is available at `/docs` when the application is running.
 
-## License
-
-This project is licensed under the MIT License.
