@@ -7,6 +7,7 @@ class User(db.Model):
     location = db.Column(db.String(100))
     professional_status = db.Column(db.Boolean, default=False)
     token = db.Column(db.String(200), unique=True)
+    role = db.Column(db.String(50), default='user')
 
     def save(self):
         db.session.add(self)
@@ -20,4 +21,3 @@ class User(db.Model):
             'location': self.location,
             'professional_status': self.professional_status
         }
-
