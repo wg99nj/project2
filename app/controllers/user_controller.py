@@ -28,6 +28,8 @@ def update_profile(request):
 
 def upgrade_to_professional(user_id):
     try:
+        if g.user.role not in ['admin', 'manager']:
+            return jsonify({'error': 'Forbidden'}), 403
         user = User.query.filter_by(id=user_id).first()
         if not user:
             return jsonify({'error': 'User not found'}), 404
@@ -39,5 +41,3 @@ def upgrade_to_professional(user_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
-
-
