@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, g
 from app.models.user import User
 from app.models.notification import Notification
 from app import db
@@ -10,7 +10,7 @@ def validate_profile_data(data):
 
 def update_profile(request):
     try:
-        user_id = request.user.id
+        user_id = g.user.id
         updates = request.json
         is_valid, message = validate_profile_data(updates)
         if not is_valid:
@@ -39,3 +39,4 @@ def upgrade_to_professional(user_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
+
